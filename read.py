@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import copy
+import config
 
 # name of file being read
 data_name = "data_small.csv"
@@ -45,6 +45,27 @@ for i in range(0,call_types_str.size):
         call_types.append(4)
         bad_ind.append(i)
 call_types = np.array(call_types)
+
+
+# read latitude
+lat=np.genfromtxt(data_name, dtype=float, delimiter=",",skip_header=1, usecols=35)
+lat_min = config.params['lat_min']
+lat_max = config.params['lat_max']
+lat_range = lat_max-lat_min
+# lat_sc = scaled latitude, over range (0,1)
+lat_sc = np.subtract(lat,lat_min)
+lat_sc = np.true_divide(lat_sc,lat_range)
+
+
+# read longitude
+lon=np.genfromtxt(data_name, dtype=float, delimiter=",",skip_header=1, usecols=36)
+lon_min = config.params['lon_min']
+lon_max = config.params['lon_max']
+lon_range = lon_max-lon_min
+# lon scaled
+lon_sc = np.subtract(lon,lon_min)
+lon_sc = np.true_divide(lon_sc,lon_range)
+
 
 
 # combine it all into one big array!
