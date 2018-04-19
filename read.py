@@ -7,6 +7,12 @@ data_name = "data_small.csv"
 # list of all "bad" indices, indices for data we can't use
 bad_ind = [] 
 
+def tsToNum(s):
+    hour = s[11:13]
+    minute = s[14:16]
+    sec = s[17:19]
+    time = float(hour)+float(minute)*(1.0/60)+float(sec)*(1.0/3600)
+    return time
 
 # read call numbers
 call_nums=np.genfromtxt(data_name, dtype=long, delimiter=",",skip_header=1, usecols=0)
@@ -67,16 +73,29 @@ lon_sc = np.subtract(lon,lon_min)
 lon_sc = np.true_divide(lon_sc,lon_range)
 
 
-# read timestamp
+# read call timestamp
 call_in_ts = np.genfromtxt(data_name, dtype=str, delimiter = ",", skip_header=1, usecols=6)
-print call_in_ts
+time_nums = []
+for i in range(0,call_in_ts.size):
+    time_nums.append(tsToNum(call_in_ts[i]))
+call_in = np.array(time_nums)
+print call_in
+
+# get call duration
+call_enter_ts = np.genfromtxt(data_name, dtype=str, delimiter = ",", skip_header=1, usecols=7)
+time_nums=[]
+for i in range(0,call_enter_ts.size):
+    time_nums.append(tsToNum(call_enter_ts[i]))
+call_done = np.array(time_nums)
+call_dur = np.subtract(call_done,call_in)
+print call_dur
 
 
 # combine it all into one big array!
-data = np.column_stack((call_nums,call_types))
+data = np.column_stack((call_nums,call_types,lat_sc,lon_sc,call_in,call_dur))
 data = np.core.records.fromarrays(data.transpose(),
-                                    names="callNum, callType",
-                                    formats = "uint32, uint8")
+                                    names="callNum, callType, latitude, longitude, callTime, callDur",
+                                    formats = "uint32, uint8, float64, float64, float64, float64")
 
 # remove the "bad" indices
 bad_ind = np.unique(bad_ind)
