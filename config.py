@@ -4,6 +4,7 @@
 nnet = dict(
     n_inputs = 4,
     n_h_neurons = 12,
+    n_h_layers = 2,
     n_outputs = 1
 )
 
