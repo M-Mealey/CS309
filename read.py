@@ -67,6 +67,10 @@ lon_sc = np.subtract(lon,lon_min)
 lon_sc = np.true_divide(lon_sc,lon_range)
 
 
+# read timestamp
+call_in_ts = np.genfromtxt(data_name, dtype=str, delimiter = ",", skip_header=1, usecols=6)
+print call_in_ts
+
 
 # combine it all into one big array!
 data = np.column_stack((call_nums,call_types))
