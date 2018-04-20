@@ -3,6 +3,8 @@ import pandas as pd
 import config as c
 import random
 
+
+
 from ann import ANN
 from deap import base,creator,tools,algorithms
 
