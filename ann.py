@@ -1,6 +1,5 @@
 import config
 import numpy as np
-#Comment
 
 num_inputs = config.nnet['n_inputs']
 num_hidden_nodes = config.nnet['n_h_neurons']
@@ -42,10 +41,9 @@ class ANN(object):
             for i in range(0,num_hidden_nodes):
                 a.append( self.activation(layer_out[i]) )
             h_out = np.array(a)
-        
+
         # evaluate output layer
         outputs = np.dot(self.output_weights, h_out)
-        
+
         # not really sure what to return here?
         return outputs.tolist()
-
