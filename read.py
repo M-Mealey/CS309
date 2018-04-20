@@ -3,7 +3,7 @@ import pandas as pd
 import config
 
 # name of file being read
-data_name = "data_small.csv"
+data_name = "data.csv"
 # list of all "bad" indices, indices for data we can't use
 bad_ind = [] 
 
@@ -61,6 +61,9 @@ lat_range = lat_max-lat_min
 # lat_sc = scaled latitude, over range (0,1)
 lat_sc = np.subtract(lat,lat_min)
 lat_sc = np.true_divide(lat_sc,lat_range)
+for i in range(0,lat_sc.size):
+    if np.isnan(lat_sc[i]):
+        bad_ind.append(i)
 
 
 # read longitude
@@ -71,6 +74,9 @@ lon_range = lon_max-lon_min
 # lon scaled
 lon_sc = np.subtract(lon,lon_min)
 lon_sc = np.true_divide(lon_sc,lon_range)
+for i in range(0,lon_sc.size):
+    if np.isnan(lon_sc[i]):
+        bad_ind.append(i)
 
 
 # read call timestamp
@@ -91,11 +97,33 @@ call_dur = np.subtract(call_done,call_in)
 print call_dur
 
 
+# dispatch times
+disp_ts = np.genfromtxt(data_name, dtype=str, delimiter = ",", skip_header=1, usecols=8)
+d_time = []
+for i in range(0,disp_ts.size):
+    if(disp_ts[i]==''):
+        d_time.append(0)
+        bad_ind.append(i)
+    else:d_time.append(tsToNum(disp_ts[i]))
+d_time = np.array(d_time)
+# on scene times
+os_ts = np.genfromtxt(data_name, dtype=str, delimiter = ",", skip_header=1, usecols=10)
+print os_ts
+os_time = []
+for i in range(0,os_ts.size):
+    if(os_ts[i]==''):
+        os_time.append(0)
+        bad_ind.append(i)
+    else: os_time.append(tsToNum(os_ts[i]))
+os_time = np.array(os_time)
+resp_time = np.subtract(os_time,d_time)
+
+
 # combine it all into one big array!
-data = np.column_stack((call_nums,call_types,lat_sc,lon_sc,call_in,call_dur))
+data = np.column_stack((call_nums,call_types,lat_sc,lon_sc,call_in,call_dur,resp_time))
 data = np.core.records.fromarrays(data.transpose(),
-                                    names="callNum, callType, latitude, longitude, callTime, callDur",
-                                    formats = "uint32, uint8, float64, float64, float64, float64")
+                                    names="callNum, callType, latitude, longitude, callTime, callDur, respTime",
+                                    formats = "uint32, uint8, float64, float64, float64, float64, float64")
 
 # remove the "bad" indices
 bad_ind = np.unique(bad_ind)
