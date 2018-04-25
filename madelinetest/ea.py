@@ -60,7 +60,6 @@ n_gen = c.ga['n_gen']
 pop_size = c.ga['pop_size']
 prob_xover = c.ga['prob_xover']
 prob_mut = c.ga['prob_mut']
-mut_indpb = c.ga['mut_ind']
 
 
 # pick ea functions
@@ -93,7 +92,7 @@ for g in range(1, n_gen):
     fitnesses = list(map(toolbox.evaluate, pop))
     for ind, fit in zip(pop,fitnesses):
         ind.fitness.values = fit
-    output += " fitnesses: " + str(fitnesses) + "\n"
+    # output += " fitnesses: " + str(fitnesses) + "\n"
 
 
 

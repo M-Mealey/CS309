@@ -4,16 +4,16 @@
 nnet = dict(
     n_inputs = 4,
     n_h_neurons = 3,
-    n_h_layers = 2,
+    n_h_layers = 3,
     n_outputs = 2
 )
 
 # configuration for genetic algorithm
 ga = dict(
-    n_gen       = 5,
+    n_gen       = 7,
     pop_size    = 5,
-    prob_xover  = 0.2,
-    prob_mut    = 0.2
+    prob_xover  = 0.3,
+    prob_mut    = 0.3
 )
 
 # some metadata for cleaning
