@@ -1,14 +1,18 @@
 import numpy as np
-import pandas as pd
+##import pandas as pd
 import config as c
 import random
-
+import warnings
+warnings.filterwarnings("ignore")
 
 
 from ann import ANN
-from deap import base,creator,tools,algorithms
+from deap import base
+from deap import creator
+from deap import tools
+##from deap import algorithms
 
-fileName = "small_data_set.csv"
+fileName = "training.csv"
 
 
 lat=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=0)
@@ -38,8 +42,11 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
+print "done"
+
+
 # Individuals
-toolbox.register("attribute", random.uniform, -100, 100)
+toolbox.register("attribute", random.uniform, -1, 1)
 toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, n=num_weights)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
@@ -74,16 +81,28 @@ fitnesses = list(map(toolbox.evaluate, pop))
 for ind, fit in zip(pop,fitnesses):
     ind.fitness.values = fit
 
+with open("output.txt", "w+") as file:
+    file.write("")
 
 # generation loop
 for g in range(1, n_gen):
     top=tools.selBest(pop,1)[0]
-    print "gen ",g-1," best fit: "
-    print top.fitness.values[0]
-    print "\n"
+    output=""
+    output+= "gen "
+    output+= str(g-1)
+    output+= " best fit: "
+    output+= str(top.fitness.values[0])
+    output+= "\n"
+    with open("output.txt", "a+") as file:
+        file.write(output)
 
     offspring = []
-    for i in range(0, (pop_size)/2):
+    # preserve best 2 population members
+    top2 = tools.selBest(pop,2)
+    offspring.append(toolbox.clone(top2[0]))
+    offspring.append(toolbox.clone(top2[1]))
+    # generate rest of offspring through breeding
+    for i in range(2, (pop_size)/2):
         p1 = toolbox.clone(toolbox.select(pop)[0])
         p2 = toolbox.clone(toolbox.select(pop)[0])
         p = random.random()
@@ -104,7 +123,12 @@ for g in range(1, n_gen):
         ind.fitness.values = fit
 
 
-
 top=tools.selBest(pop,1)[0]
 print "final best fit: "
 print top.fitness.values[0]
+with open("output.txt", "a+") as file:
+    file.write(output)
+    file.write("\n best individual:\n")
+    file.write(str(top))
+best_ind_arr = np.array(top)
+np.savetxt("topind.csv", best_ind_arr, fmt="%10.20f", delimiter=",")
