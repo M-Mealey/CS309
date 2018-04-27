@@ -2,6 +2,26 @@ I made this one to only predict call time
 4 hidden nodes, 2 hidden layers
 attribute range: -5 to 5
 
+
+# config file
+
+# configuration for neural network
+nnet = dict(
+    n_inputs = 4,
+    n_h_neurons = 4,
+    n_h_layers = 2,
+    n_outputs = 2
+)
+
+# configuration for genetic algorithm
+ga = dict(
+    n_gen       = 100,
+    pop_size    = 100,
+    prob_xover  = 0.2,
+    prob_mut    = 0.2,
+    mut_ind     = 0.1
+)
+
 gen 0 best fit: 115673.66661452307
 gen 1 best fit: 112665.88335267073
 gen 2 best fit: 105238.2776171453
