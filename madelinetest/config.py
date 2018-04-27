@@ -10,8 +10,8 @@ nnet = dict(
 
 # configuration for genetic algorithm
 ga = dict(
-    n_gen       = 7,
-    pop_size    = 5,
+    n_gen       = 50,
+    pop_size    = 10,
     prob_xover  = 0.3,
     prob_mut    = 0.3
 )

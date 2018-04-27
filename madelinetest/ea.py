@@ -99,5 +99,10 @@ for g in range(1, n_gen):
 top=tools.selBest(pop,1)[0]
 output += "final best fit: "
 output += str(top.fitness.values[0])
+for ind in pop:
+    if top.fitness.values[0] == ind.fitness.values:
+        output += str(ind)
+        break
+
 with open("output.txt", "w") as file:
     file.write(output)
