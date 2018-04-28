@@ -10,20 +10,20 @@ from ann import ANN
 from deap import base
 from deap import creator
 from deap import tools
-##from deap import algorithms
+import time
 
 fileName = "training.csv"
 
 
 lat=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=0)
 lon=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=1)
-time=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=2)
+times=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=2)
 call_dur=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=3)
 call_type=np.genfromtxt(fileName, dtype=int, delimiter=",",skip_header=1, usecols=4)
 response_time=np.genfromtxt(fileName, dtype=float, delimiter=",",skip_header=1, usecols=5)
 
 
-inputs = np.column_stack((lat,lon,time,call_dur))
+inputs = np.column_stack((lat,lon,times,call_dur))
 print inputs
 outputs = np.column_stack((call_type,response_time))
 print outputs
@@ -46,7 +46,7 @@ print "done"
 
 
 # Individuals
-toolbox.register("attribute", random.uniform, -1, 1)
+toolbox.register("attribute", random.uniform, -5, 5)
 toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, n=num_weights)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
@@ -77,24 +77,31 @@ toolbox.register("select", tools.selTournament, k=1, tournsize=2)
 
 pop = toolbox.population(n=pop_size)
 
+##start = time.time()
+
 fitnesses = list(map(toolbox.evaluate, pop))
 for ind, fit in zip(pop,fitnesses):
     ind.fitness.values = fit
 
 with open("output.txt", "w+") as file:
-    file.write("")
+    file.write("gen \tbest fitness\n")
 
 # generation loop
 for g in range(1, n_gen):
     top=tools.selBest(pop,1)[0]
     output=""
-    output+= "gen "
+##    output+= "gen "
     output+= str(g-1)
-    output+= " best fit: "
+    output+= "\t"
+##    output+= " best fit: "
     output+= str(top.fitness.values[0])
+##    output+= "\ntime elapsed:"
+##    output+= str(time.time()-start)
     output+= "\n"
     with open("output.txt", "a+") as file:
         file.write(output)
+
+##    start = time.time()
 
     offspring = []
     # preserve best 2 population members

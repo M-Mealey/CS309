@@ -31,6 +31,7 @@ ann_out_ctype = np.around(ann_out_ctype)
 
 correct = 0
 for i in range(len(ann_out_ctype)):
+##    print ann_out_ctype[i], "   ", outputs[i][0]
     if (ann_out_ctype[i]==outputs[i][0]):
         correct = correct+1
 
@@ -38,10 +39,16 @@ ctype_correct = (float(correct)/len(ann_out_ctype))*100
 print "correct: ",correct
 print "percent: ", ctype_correct
 
+within_one = 0;
 response_err = []
 for i in range(len(ann_out_rtime)):
+##    print ann_out_rtime[i], "    ",outputs[i][1]
     response_err.append(ann_out_rtime[i] - outputs[i][1])
+    if( np.abs(ann_out_rtime[i]-outputs[i][1]) < 1):
+        within_one = within_one+1;
 
+print within_one, " predictions were within one minute"
+print float(within_one)/len(ann_out_rtime) *100, "percent of predictions were within one minute"
 print "mean response prediction error: ",np.mean(response_err)
 print "response prediction error st dev: ", np.std(response_err)
 

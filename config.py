@@ -3,15 +3,15 @@
 # configuration for neural network
 nnet = dict(
     n_inputs = 4,
-    n_h_neurons = 3,
+    n_h_neurons = 4,
     n_h_layers = 2,
     n_outputs = 2
 )
 
 # configuration for genetic algorithm
 ga = dict(
-    n_gen       = 50,
-    pop_size    = 50,
+    n_gen       = 100,
+    pop_size    = 100,
     prob_xover  = 0.2,
     prob_mut    = 0.2,
     mut_ind     = 0.1
