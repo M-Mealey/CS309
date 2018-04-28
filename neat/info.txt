@@ -1,0 +1,2 @@
+to install neat:
+pip install neat-python
