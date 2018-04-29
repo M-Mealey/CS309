@@ -39,7 +39,7 @@ creator.create("Individual", list, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 
 # Individuals
-toolbox.register("attribute", random.uniform, -100, 100)
+toolbox.register("attribute", random.uniform, -20, 20)
 toolbox.register("individual", tools.initRepeat, creator.Individual, toolbox.attribute, n=num_weights)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
